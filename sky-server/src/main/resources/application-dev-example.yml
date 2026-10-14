@@ -1,0 +1,45 @@
+sky:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: sky_take_out
+    username: root
+    # TODO: 填你自己的 MySQL 密码
+    password: your-mysql-password
+
+  alioss:
+    endpoint:
+    access-key-id:
+    access-key-secret:
+    bucket-name:
+
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    database: 0
+
+  # 微信支付（演示环境用 Mock 模式，真机联调才需要填真实值）
+  # 注意：apiV3Key / 商户私钥属于高敏感凭据，务必只放在本地，不要提交到仓库
+  wechat:
+    appid: your-wx-appid
+    secret: your-wx-secret
+    mchid: your-mch-id
+    mchSerialNo: your-mch-serial-no
+    privateKeyFilePath: D:/pay/apiclient_key.pem
+    apiV3Key: your-api-v3-key
+    weChatPayCertFilePath: D:/pay/wechatpay_cert.pem
+    notifyUrl: http://localhost:8080/notify/paySuccess
+    refundNotifyUrl: http://localhost:8080/notify/refundSuccess
+
+  jwt:
+    admin-secret-key: change-me-admin-secret-key-32-bytes-min
+    user-secret-key: change-me-user-secret-key-32-bytes-min
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  rabbitmq:
+    password: your-rabbitmq-password

@@ -1,0 +1,33 @@
+{
+  "args": {
+    "scenario": "ratelimit",
+    "c": 20,
+    "d": 10,
+    "warmup": 0,
+    "pool": 2000,
+    "userBase": 9001,
+    "goods": 5,
+    "dish": 0
+  },
+  "result": {
+    "name": "限流验证（同一用户 userId=1 高频打秒杀接口）",
+    "total": 55718,
+    "ok": 0,
+    "durationSec": 9.98,
+    "qps": 5583.5,
+    "latencyMs": {
+      "mean": 3.58,
+      "p50": 3.27,
+      "p90": 4.69,
+      "p95": 5.35,
+      "p99": 8.84,
+      "max": 70.89
+    },
+    "labels": {
+      "rate_limited": 55688,
+      "dup": 29,
+      "passed_biz:1": 1
+    },
+    "errorSamples": []
+  }
+}

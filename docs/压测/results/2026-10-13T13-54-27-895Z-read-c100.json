@@ -1,0 +1,31 @@
+{
+  "args": {
+    "scenario": "read",
+    "c": 100,
+    "d": 25,
+    "warmup": 3,
+    "pool": 2000,
+    "userBase": 9001,
+    "goods": 0,
+    "dish": 0
+  },
+  "result": {
+    "name": "缓存读取（/user/category/list + /user/dish/list，走二级缓存）",
+    "total": 63522,
+    "ok": 63522,
+    "durationSec": 25.02,
+    "qps": 2538.4,
+    "latencyMs": {
+      "mean": 39.38,
+      "p50": 37.86,
+      "p90": 58.07,
+      "p95": 66,
+      "p99": 87.83,
+      "max": 186.02
+    },
+    "labels": {
+      "ok": 63522
+    },
+    "errorSamples": []
+  }
+}

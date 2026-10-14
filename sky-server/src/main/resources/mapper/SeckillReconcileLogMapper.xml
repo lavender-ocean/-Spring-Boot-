@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SeckillReconcileLogMapper">
+
+    <insert id="insertBatch">
+        insert into seckill_reconcile_log
+        (goods_id, db_stock, redis_stock, diff, scene, action, reconciled, alerted, create_time)
+        values
+        <foreach collection="logs" item="log" separator=",">
+            (#{log.goodsId}, #{log.dbStock}, #{log.redisStock}, #{log.diff},
+            #{log.scene}, #{log.action}, #{log.reconciled}, #{log.alerted}, #{log.createTime})
+        </foreach>
+    </insert>
+
+    <delete id="cleanOldLogs">
+        delete from seckill_reconcile_log
+        where create_time &lt; date_sub(now(), interval 30 day)
+    </delete>
+
+
+
+</mapper>

@@ -1,0 +1,21 @@
+**/target/
+.idea
+*.iml
+*.class
+*Test.java
+**/test/
+
+# ===== 不入库：本地私有内容 =====
+# 本地真实配置（含数据库密码、第三方密钥等）
+sky-server/src/main/resources/application-dev.yml
+# 本地前端工程（含 node_modules，体积大）
+front/
+# 本地文档：仅保留 docs/压测
+docs/*
+!docs/压测/
+# 仅入库 README 与压测文档，其余 .md 一律视为本地笔记
+*.md
+!README.md
+!docs/压测/*.md
+# 本地笔记目录（源码树里的 xxxmd/ 与 md/）
+*md/

@@ -1,0 +1,125 @@
+server:
+  port: 8080
+
+# 方案 A（最小改动）
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info        # 不要 '*'
+  endpoint:
+    health:
+      show-details: when-authorized # 原来是 always，会泄露 DB/Redis 健康细节
+
+spring:
+
+
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher   #  强制用 Ant 匹配器
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+  datasource:
+    druid:
+      driver-class-name: ${sky.datasource.driver-class-name}
+      url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${sky.datasource.username}
+      password: ${sky.datasource.password}
+      # 空闲连接超过多久销毁，单位ms
+      min-evictable-idle-time-millis: 300000
+      # 检测空闲连接的周期
+      time-between-eviction-runs-millis: 60000
+      # 关闭检测不合法连接
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 100MB
+  redis:
+    host: ${sky.redis.host}
+    port: ${sky.redis.port}
+    password:
+    database: ${sky.redis.database}
+
+
+  rabbitmq:
+    # ★ 真实凭据不入库：本文件只保留占位默认值，本地真实值放在 application-dev.yml（已 gitignore）或环境变量里
+    host: ${SKY_RABBITMQ_HOST:localhost}
+    port: ${SKY_RABBITMQ_PORT:5672}
+    username: ${SKY_RABBITMQ_USER:admin}
+    password: ${SKY_RABBITMQ_PASSWORD:change-me}
+    virtual-host: /
+    # 生产者可靠性
+    publisher-confirm-type: correlated      # 开启 Publisher Confirm
+    publisher-returns: true                 # 开启 Return Callback（路由失败回调）
+    template:
+      # ===== 以下为改动前的原始配置，保留备查 =====
+      # mandatory: false                       # 路由失败时触发 ReturnCallback，而不是静默丢弃
+      #   ↑ 原值为 false，与注释语义正好相反：false 时 broker 会把"路由不到队列"的消息直接丢弃，
+      #     ReturnCallback 永远不会被触发（回调形同死代码）
+      mandatory: true                        # 路由失败时触发 ReturnCallback，而不是静默丢弃
+
+    # 消费者可靠性
+    listener:
+      simple:
+        acknowledge-mode: manual            # 手动 ACK
+        prefetch: 10                        # 一次拉 10 条，避免消费者空转
+        retry:
+          enabled: true                     # 本地重试
+          max-attempts: 3                   # 最多重试 3 次
+          initial-interval: 1000            # 次间隔 1s
+          multiplier: 2.0                   # 指数退避：1s → 2s → 4s
+          max-interval: 10000               # 最大 10s
+
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml,classpath:userMapper/*.xml
+  type-aliases-package: com.sky.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com:
+      sky:
+        mapper: debug
+        service: info
+        controller: info
+        utils: debug
+
+sky:
+  jwt:
+    # 管理端
+    admin-secret-key: ${SKY_JWT_ADMIN_SECRET:change-me-admin-secret-key-32-bytes-min}
+    admin-ttl: 1800000          #  30分钟
+    admin-token-name: token
+    admin-refresh-ttl: 604800000  #  7天
+    # 用户端
+    user-secret-key: ${SKY_JWT_USER_SECRET:change-me-user-secret-key-32-bytes-min}
+    user-ttl: 1800000            #  30分钟
+    user-token-name: user_token
+    user-refresh-ttl: 604800000
+
+  mock-pay:
+    enabled: true         #  演示环境开启
+    pay-delay-ms: 2000    # 2 秒延迟，模拟用户支付
+
+
+
+  seckill:
+    reconcile:
+      enabled: true                # 是否启用对账任务
+      cron: "0 * * * * ?"          # 每分钟执行
+      alert-threshold: 5           # 告警阈值
+      reconcile-threshold: 10      # 自动校正阈值
+      lock-wait-seconds: 0         # 锁等待时间（0=不等待）
+      lock-lease-seconds: 30       # 锁租期
+      max-goods-per-run: 100       # 单次最多处理商品数（防大表）

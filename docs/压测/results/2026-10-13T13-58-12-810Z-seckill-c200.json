@@ -1,0 +1,33 @@
+{
+  "args": {
+    "scenario": "seckill",
+    "c": 200,
+    "d": 8,
+    "warmup": 0,
+    "pool": 2000,
+    "userBase": 9001,
+    "goods": 5,
+    "dish": 0
+  },
+  "result": {
+    "name": "秒杀抢购（goodsId=5，用户池=2000）",
+    "total": 29759,
+    "ok": 100,
+    "durationSec": 7.99,
+    "qps": 3725.2,
+    "latencyMs": {
+      "mean": 53.59,
+      "p50": 48.28,
+      "p90": 69.36,
+      "p95": 84.49,
+      "p99": 134.56,
+      "max": 215.39
+    },
+    "labels": {
+      "biz:0": 28259,
+      "biz:-1": 1400,
+      "biz:1": 100
+    },
+    "errorSamples": []
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "args": {
+    "scenario": "order",
+    "c": 50,
+    "d": 15,
+    "warmup": 3,
+    "pool": 300,
+    "userBase": 9001,
+    "goods": 0,
+    "dish": 78
+  },
+  "result": {
+    "name": "下单主链路（加购 + 提交订单，用户池=300）",
+    "total": 3427,
+    "ok": 3427,
+    "durationSec": 15.2,
+    "qps": 225.5,
+    "latencyMs": {
+      "mean": 220.3,
+      "p50": 220.38,
+      "p90": 254.93,
+      "p95": 269.23,
+      "p99": 300.94,
+      "max": 359.65
+    },
+    "labels": {
+      "ok": 3427
+    },
+    "errorSamples": []
+  }
+}
